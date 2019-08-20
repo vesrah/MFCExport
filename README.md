@@ -3,4 +3,5 @@ I fully admit I am not a Python dev so don't roast me over conventions, this is 
 Usecase behind this was to get a spreadsheet of figured owned by my girlfriend for insurance reasons.  It may break at any time.
 ### Usage
 `pip install -r requirements.txt`
+
 `python mfcExport.py mfc-username`
