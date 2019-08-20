@@ -1,0 +1,16 @@
+beautifulsoup4==4.8.0
+cairocffi==0.9.0
+CairoSVG==2.2.1
+certifi==2019.6.16
+cffi==1.11.5
+chardet==3.0.4
+cssselect2==0.2.1
+defusedxml==0.5.0
+idna==2.8
+Pillow==5.3.0
+pycparser==2.19
+requests==2.22.0
+soupsieve==1.9.3
+tinycss2==0.6.1
+urllib3==1.25.3
+webencodings==0.5.1
