@@ -35,7 +35,6 @@ def get_figure_data(figures):
     figures_with_data = []
 
     for (i, figure) in enumerate(figures):
-        # print(str(i + 1) + "/" + str(len(figures)))
         API_QUERYSTRING.update({ "id": figure[0] })
         api_response = requests.get(API_URL, API_QUERYSTRING).json()["items"]
 
@@ -44,13 +43,24 @@ def get_figure_data(figures):
             return
 
         figure_data = api_response["item"]
+        figure_detail_url = "https://myfigurecollection.net/item/" + str(figure[0])
+        figure_release_date = str(figure_data["release_date"])
+
+        # Sometimes the figures are given a 00 day of the month,
+        # set it to the first of the month for Google Sheets date formatting
+        if (figure_release_date.endswith("-00")):
+            figure_release_date = figure_release_date.replace("-00", "-01")
+
+        # Also get rid of another weird API thing
+        figure_release_date = figure_release_date.replace("{}", "")
+
         figures_with_data = figures_with_data + [(
             figure[0],
             figure_data["name"],
             int(figure_data["price"]),
-            figure_data["release_date"],
+            figure_release_date,
             figure[1],
-            "https://myfigurecollection.net/item/" + str(figure[0]),
+            figure_detail_url,
             figure_data["thumbnail"],
             figure_data["full"],
         )]
@@ -101,12 +111,16 @@ def get_page_count(profile_soup):
 def write_csv(figure_list):
     filename = "mfcexport-" + PROFILE_QUERYSTRING["username"].replace(" ", "_") + ".csv"
     print("Writing " + str(len(figure_list)) + " figures to " + filename + "...")
+
+    # Sort by Figure ID
+    figure_list = sorted(figure_list, key=lambda f: f[0])
+
     with open(filename, "w", newline="", encoding="utf-8") as output:
         file_writer = csv.writer(output)
         file_writer.writerow([
             "ID",
             "Name",
-            "Price (yen)",
+            "Price (JPY)",
             "Release Date",
             "Owned Count",
             "Detail URL",
